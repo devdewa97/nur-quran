@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Search, Moon, Sun, Bookmark, Settings, Play, Pause, 
   ChevronLeft, X, BookOpen, Quote, Heart, ChevronRight,
@@ -132,6 +132,30 @@ const App = () => {
 
   // --- UI COMPONENTS ---
 
+  // Komponen partikel untuk efek Hero
+  const Particles = () => {
+    const particlesArray = useMemo(() => Array.from({ length: 25 }), []);
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {particlesArray.map((_, i) => (
+          <div
+            key={i}
+            className="absolute bg-white/20 rounded-full animate-float-up"
+            style={{
+              width: `${Math.random() * 4 + 2}px`,
+              height: `${Math.random() * 4 + 2}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${Math.random() * 15 + 10}s`,
+              opacity: Math.random() * 0.5 + 0.1
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
   const IslamicPattern = ({ className }) => (
     <div className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -145,18 +169,18 @@ const App = () => {
   );
 
   const Logo = () => (
-    <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group shrink-0" onClick={() => setView('home')}>
+    <div className="flex items-center gap-3 sm:gap-4 cursor-pointer group shrink-0" onClick={() => setView('home')}>
       <div className="relative">
-        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-700 rounded-[8px] flex items-center justify-center text-white shadow-lg rotate-2 group-hover:rotate-0 transition-transform duration-300">
-          <BookOpen size={18} className="sm:size-20" />
+        <div className="w-10 h-10 sm:w-11 sm:h-11 bg-emerald-700 rounded-[10px] flex items-center justify-center text-white shadow-lg rotate-2 group-hover:rotate-0 transition-transform duration-300">
+          <BookOpen size={22} className="sm:size-24" />
         </div>
-        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-400 rounded-full border-2 border-white dark:border-slate-900"></div>
+        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-amber-400 rounded-full border-2 border-white dark:border-slate-900"></div>
       </div>
       <div className="flex flex-col">
-        <h1 className={`text-sm sm:text-lg font-black leading-none tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+        <h1 className={`text-base sm:text-xl font-black leading-none tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
           {APP_NAME}
         </h1>
-        <p className="text-[8px] sm:text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mt-0.5 sm:mt-1">
+        <p className="text-[10px] sm:text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mt-1">
           {BYLINE}
         </p>
       </div>
@@ -164,30 +188,30 @@ const App = () => {
   );
 
   const Header = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-md border-b px-4 sm:px-8 py-2.5 sm:py-3 transition-colors duration-300 ${darkMode ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-200'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-md border-b px-4 sm:px-8 py-3 sm:py-4 transition-colors duration-300 ${darkMode ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-200'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Logo />
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button 
             onClick={() => setDarkMode(!darkMode)} 
-            className={`p-2 rounded-[10px] transition-colors ${darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
+            className={`p-2.5 sm:p-3 rounded-[12px] transition-colors ${darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
             aria-label="Toggle Dark Mode"
           >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            {darkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>
           <button 
             onClick={() => setView('bookmarks')} 
-            className={`p-2 rounded-[10px] transition-colors ${view === 'bookmarks' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600' : darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
+            className={`p-2.5 sm:p-3 rounded-[12px] transition-colors ${view === 'bookmarks' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600' : darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
             aria-label="Bookmarks"
           >
-            <Bookmark size={18} />
+            <Bookmark size={22} />
           </button>
           <button 
             onClick={() => setView('settings')} 
-            className={`p-2 rounded-[10px] transition-colors ${view === 'settings' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600' : darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
+            className={`p-2.5 sm:p-3 rounded-[12px] transition-colors ${view === 'settings' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600' : darkMode ? 'hover:bg-slate-900 text-slate-400' : 'hover:bg-slate-100 text-slate-600'}`}
             aria-label="Settings"
           >
-            <Settings size={18} />
+            <Settings size={22} />
           </button>
         </div>
       </div>
@@ -228,6 +252,29 @@ const App = () => {
   if (view === 'landing') {
     return (
       <div className={`min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden relative ${darkMode ? 'bg-slate-950 text-white' : 'bg-white text-slate-900'}`}>
+        <style>
+          {`
+            @keyframes floatUp {
+              0% { transform: translateY(0) translateX(0); opacity: 0; }
+              20% { opacity: 0.5; }
+              80% { opacity: 0.5; }
+              100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+            }
+            .animate-float-up {
+              animation: floatUp linear infinite;
+            }
+            @keyframes gradientMove {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            .bg-animated-emerald {
+              background: linear-gradient(-45deg, #064e3b, #065f46, #047857, #064e3b);
+              background-size: 400% 400%;
+              animation: gradientMove 15s ease infinite;
+            }
+          `}
+        </style>
         <IslamicPattern className="text-emerald-600 opacity-5 dark:opacity-10" />
         <div className="absolute top-0 right-0 w-64 h-64 sm:w-72 sm:h-72 bg-emerald-600/10 rounded-full blur-[80px] sm:blur-[100px] -mr-32 -mt-32"></div>
         <div className="max-w-3xl w-full text-center relative z-10 animate-in fade-in duration-1000 px-4">
@@ -253,28 +300,51 @@ const App = () => {
 
   // --- TAMPILAN: UTAMA ---
   return (
-    <div className={`min-h-screen transition-colors duration-300 pt-[60px] sm:pt-[72px] ${darkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`min-h-screen transition-colors duration-300 pt-[76px] sm:pt-[88px] ${darkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+      <style>
+        {`
+          @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+          }
+          .animate-float-up {
+            animation: floatUp linear infinite;
+          }
+          @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .bg-animated-emerald {
+            background: linear-gradient(-45deg, #064e3b, #065f46, #059669, #064e3b);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+          }
+        `}
+      </style>
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6">
         
         {view === 'home' && (
           <>
-            {/* --- ELEGANT HERO SECTION --- */}
-            <section className="relative w-full mb-8 sm:mb-20 rounded-[15px] overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-950"></div>
-              <IslamicPattern className="text-emerald-500 opacity-20" />
+            {/* --- ELEGANT HERO SECTION DENGAN ANIMASI & PARTIKEL --- */}
+            <section className="relative w-full mb-8 sm:mb-20 rounded-[15px] overflow-hidden shadow-2xl bg-animated-emerald">
+              <IslamicPattern className="text-white opacity-10" />
+              <Particles />
 
               <div className="relative z-10 p-6 sm:p-20 flex flex-col items-center text-center">
-                <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-[9px] sm:text-xs font-black uppercase text-emerald-300 tracking-[0.2em] mb-6 border border-white/5">
-                  <Sparkles size={10} className="sm:size-12" /> Digital Experience
+                <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-[9px] sm:text-xs font-black uppercase text-emerald-300 tracking-[0.2em] mb-6 border border-white/5 shadow-lg">
+                  <Sparkles size={10} className="sm:size-12 animate-pulse" /> Nur Qurani - AL QURAN DIGITAL
                 </div>
                 
-                <h2 className="text-2xl sm:text-6xl font-black text-white leading-[1.2] sm:leading-[1.1] mb-6 max-w-3xl tracking-tight">
-                  Pelita Hati dalam Setiap <span className="text-emerald-400">Lantunan Ayat.</span>
+                <h2 className="text-2xl sm:text-6xl font-black text-white leading-[1.2] sm:leading-[1.1] mb-6 max-w-3xl tracking-tight drop-shadow-lg">
+                  Pelita Hati dalam Setiap <span className="text-emerald-300">Lantunan Ayat.</span>
                 </h2>
 
-                <p className="text-[10px] sm:text-lg text-emerald-100/60 max-w-xl mb-8 sm:mb-10 font-medium leading-relaxed px-2">
+                <p className="text-[10px] sm:text-lg text-emerald-100/70 max-w-xl mb-8 sm:mb-10 font-medium leading-relaxed px-2">
                   Membaca Al-Qur'an kini lebih nyaman dengan irama yang menyejukkan hati.
                 </p>
 
@@ -286,7 +356,7 @@ const App = () => {
                     <input 
                       type="text" 
                       placeholder="Cari Surah..."
-                      className="w-full bg-white/10 backdrop-blur-xl border border-white/20 focus:border-emerald-400 focus:bg-white/20 text-white rounded-[10px] py-3.5 sm:py-6 pl-12 sm:pl-16 pr-6 outline-none text-sm sm:text-xl transition-all shadow-2xl placeholder:text-emerald-100/30 font-medium"
+                      className="w-full bg-white/10 backdrop-blur-xl border border-white/20 focus:border-emerald-400 focus:bg-white/20 text-white rounded-[12px] py-3.5 sm:py-6 pl-12 sm:pl-16 pr-6 outline-none text-sm sm:text-xl transition-all shadow-2xl placeholder:text-emerald-100/30 font-medium"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -298,7 +368,7 @@ const App = () => {
                      <button 
                       key={qs.id}
                       onClick={() => openSurah(qs.id)}
-                      className="px-3.5 py-1.5 sm:px-5 sm:py-2.5 bg-white/5 hover:bg-emerald-500/20 border border-white/10 rounded-[8px] text-[9px] sm:text-xs text-emerald-200 font-bold transition-all flex items-center gap-2 backdrop-blur-sm active:scale-95"
+                      className="px-3.5 py-1.5 sm:px-5 sm:py-2.5 bg-white/5 hover:bg-emerald-500/20 border border-white/10 rounded-[8px] text-[9px] sm:text-xs text-emerald-200 font-bold transition-all flex items-center gap-2 backdrop-blur-sm active:scale-95 shadow-md"
                      >
                        <Clock size={12} className="opacity-50" /> {qs.name}
                      </button>
@@ -306,7 +376,7 @@ const App = () => {
                 </div>
               </div>
               
-              <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
             </section>
 
             {/* --- SURAH LIST GRID --- */}
@@ -488,18 +558,24 @@ const App = () => {
 
       <Footer />
 
-      {/* Floating Audio Player (Global UI for Reader) */}
+      {/* Floating Audio Player */}
       {view === 'reader' && activeVerse && (
-        <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-sm bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-emerald-100 dark:border-slate-800 p-3 sm:p-4 rounded-[15px] shadow-2xl flex items-center justify-between ring-4 ring-emerald-500/5">
+        <div className={`fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-sm backdrop-blur-md border p-3 sm:p-4 rounded-[15px] shadow-2xl flex items-center justify-between ring-4 ring-emerald-500/5 transition-colors duration-300 ${darkMode ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-emerald-100'}`}>
            <div className="flex flex-col ml-1 sm:ml-2 overflow-hidden">
-              <span className="text-[8px] sm:text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1"><Music size={10} /> Nahawand Style</span>
-              <span className={`text-xs font-bold truncate max-w-[140px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>{selectedSurah.namaLatin} : {activeVerse}</span>
+              <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-widest flex items-center gap-1 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                <Music size={10} /> Nahawand Style
+              </span>
+              <span className={`text-xs font-bold truncate max-w-[140px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {selectedSurah.namaLatin} : {activeVerse}
+              </span>
            </div>
            <div className="flex items-center gap-2">
              <button onClick={() => setIsPlaying(!isPlaying)} className="w-9 h-9 sm:w-10 sm:h-10 bg-emerald-700 text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
                 {isPlaying ? <Pause size={18} fill="white"/> : <Play size={18} fill="white"/>}
              </button>
-             <button onClick={() => {setActiveVerse(null); setIsPlaying(false)}} className="text-slate-300 hover:text-red-500 transition-colors p-1.5 sm:p-2"><X size={16} sm:size={18}/></button>
+             <button onClick={() => {setActiveVerse(null); setIsPlaying(false)}} className={`transition-colors p-1.5 sm:p-2 ${darkMode ? 'text-slate-500 hover:text-red-400' : 'text-slate-400 hover:text-red-500'}`}>
+               <X size={16} sm:size={18}/>
+             </button>
            </div>
            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
         </div>
