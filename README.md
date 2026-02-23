@@ -1,16 +1,27 @@
-# React + Vite
+# 📖 Nur Quran
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Nur Quran** adalah aplikasi Al-Qur’an digital modern yang dirancang untuk memudahkan umat Muslim membaca, memahami, dan mendekatkan diri kepada Al-Qur’an kapan pun dan di mana pun.  
+Ringan, cepat, dan fokus ke kenyamanan pengguna ✨
 
-Currently, two official plugins are available:
+> _“Menerangi hati dengan cahaya Al-Qur’an.”_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🌙 Fitur Utama
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 📜 Al-Qur’an Lengkap 30 Juz  
+- 🔍 Pencarian Surah & Ayat  
+- 🌐 Terjemahan Bahasa Indonesia  
+- 🎧 Audio Murottal (opsional)  
+- 🌙 Tampilan Modern & Nyaman di Mata  
+- 📱 Responsif (Mobile & Desktop)  
+- 🚀 Gratis & Tanpa Login  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Teknologi yang Digunakan
+
+- ⚛️ React JS  
+- ⚡ Vite  
+- 🎨 CSS / Tailwind CSS  
+- 📦 Public Al-Qur’an API  
