@@ -3,7 +3,8 @@ import {
   Search, Moon, Sun, Bookmark, Settings, Play, Pause, 
   ChevronLeft, X, BookOpen, Quote, Heart, ChevronRight,
   ArrowRight, Music, Clock, Sparkles, LayoutGrid,
-  FileText, Scroll, Hand, Loader2, Coffee, GraduationCap
+  FileText, Scroll, Hand, Loader2, Coffee, GraduationCap,
+  Info
 } from 'lucide-react';
 
 // Konfigurasi
@@ -67,10 +68,16 @@ const App = () => {
   const [showTranslation, setShowTranslation] = useState(getFromLocal('showTrans') ?? true);
   const [bookmarks, setBookmarks] = useState(getFromLocal('bookmarks') || []);
   
+  // State untuk Popup Pengembangan
+  const [showDevPopup, setShowDevPopup] = useState(false);
+
   const audioRef = useRef(null);
 
   useEffect(() => {
     fetchSurahs();
+    // Tampilkan popup pengembangan setelah delay singkat
+    const timer = setTimeout(() => setShowDevPopup(true), 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -152,7 +159,7 @@ const App = () => {
   };
 
   const Header = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-lg border-b px-4 sm:px-8 py-4 sm:py-6 transition-all duration-300 ${darkMode ? 'bg-slate-950/90 border-slate-800 shadow-2xl shadow-black/40' : 'bg-white/95 border-slate-200'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-lg border-b px-4 sm:px-8 py-4 sm:py-6 transition-all duration-300 ${darkMode ? 'bg-slate-950/90 border-slate-800 shadow-2xl shadow-black/40' : 'bg-white/95 border-slate-200 shadow-sm'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => {setView('home'); setSubMenu(null); setDoaCategory(null); setSelectedSurah(null);}}>
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-700 rounded-[10px] flex items-center justify-center text-white shadow-xl">
@@ -214,7 +221,7 @@ const App = () => {
               <h4 className="font-bold text-emerald-600 text-xs sm:text-sm">{item.title}</h4>
             </div>
             <div className={`text-right text-3xl sm:text-4xl font-serif mb-8 leading-relaxed ${darkMode ? 'text-slate-100' : 'text-slate-900'}`} dir="rtl">{item.ar}</div>
-            <p className={`text-sm sm:text-lg font-light leading-relaxed border-l-4 border-emerald-100 pl-4 ${darkMode ? 'text-slate-400 border-emerald-900' : 'text-slate-600'}`}>{item.idn}</p>
+            <p className={`text-sm sm:text-lg font-light leading-relaxed border-l-4 border-emerald-100 pl-4 ${darkMode ? 'text-slate-400 border-emerald-900' : 'text-slate-600 border-emerald-50'}`}>{item.idn}</p>
           </div>
         ))}
       </div>
@@ -263,7 +270,7 @@ const App = () => {
                 <h2 className="text-2xl sm:text-6xl font-black text-white leading-tight mb-8 drop-shadow-xl">Pelita Hati dalam Setiap <span className="text-emerald-300">Lantunan Ayat.</span></h2>
                 <div className="relative w-full max-w-2xl group px-2 sm:px-0">
                   <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-400" size={22} />
-                  <input type="text" placeholder="Cari Surah atau Doa..." className="w-full bg-white/10 backdrop-blur-xl border border-white/20 focus:border-emerald-400 focus:bg-white/20 text-white rounded-[10px] py-4 sm:py-6 pl-16 pr-8 outline-none text-base sm:text-xl transition-all shadow-2xl placeholder:text-emerald-100/30 font-medium" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                  <input type="text" placeholder="Cari Surah atau Doa..." className="w-full bg-white/10 backdrop-blur-xl border border-white/20 focus:border-emerald-400 focus:bg-white/20 text-white rounded-[12px] py-4 sm:py-6 pl-16 pr-8 outline-none text-base sm:text-xl transition-all shadow-2xl placeholder:text-emerald-100/30 font-medium" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 </div>
               </div>
             </section>
@@ -296,7 +303,7 @@ const App = () => {
                       <div className={`w-11 h-11 flex-shrink-0 rounded-[10px] flex items-center justify-center text-sm font-black ${darkMode ? 'bg-slate-800 text-slate-500' : 'bg-slate-50 text-slate-400'} group-hover:bg-emerald-700 group-hover:text-white transition-all`}>{surah.nomor}</div>
                       <div className="flex-1 min-w-0">
                         <h3 className={`font-bold group-hover:text-emerald-700 transition-colors truncate text-sm sm:text-base ${darkMode ? 'text-white' : 'text-slate-900'}`}>{surah.namaLatin}</h3>
-                        <p className={`text-[8px] sm:text-[10px] font-medium uppercase truncate ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{surah.arti} • {surah.jumlahAyat} Ayat</p>
+                        <p className="text-[8px] sm:text-[10px] font-medium uppercase truncate text-slate-500">{surah.arti} • {surah.jumlahAyat} Ayat</p>
                       </div>
                       <div className={`text-right text-lg sm:text-2xl font-serif ${darkMode ? 'text-emerald-500' : 'text-emerald-800'}`}>{surah.nama}</div>
                     </div>
@@ -389,7 +396,7 @@ const App = () => {
                       <button onClick={() => playAudio(ayat)} disabled={isBuffering && activeVerse === ayat.nomorAyat} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${activeVerse === ayat.nomorAyat && isPlaying ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-300 hover:text-emerald-600 hover:bg-emerald-50'}`}>
                         {activeVerse === ayat.nomorAyat && isBuffering ? <Loader2 size={20} className="animate-spin" /> : activeVerse === ayat.nomorAyat && isPlaying ? <Pause size={20} fill="white" /> : <Play size={20} />}
                       </button>
-                      <button onClick={() => toggleBookmark(ayat)} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${bookmarks.some(b => b.nomorAyat === ayat.nomorAyat && b.surahNumber === selectedSurah.nomor) ? 'text-amber-500' : 'text-slate-300 hover:text-amber-500'}`}><Bookmark size={20} fill={bookmarks.some(b => b.nomorAyat === ayat.nomorAyat && b.surahNumber === selectedSurah.nomor) ? "currentColor" : "none"} /></button>
+                      <button onClick={() => toggleBookmark(ayat)} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${bookmarks.some(b => b.nomorAyat === verse.nomorAyat && b.surahNumber === selectedSurah.nomor) ? 'text-amber-500' : 'text-slate-300 hover:text-amber-500'}`}><Bookmark size={20} fill={bookmarks.some(b => b.nomorAyat === ayat.nomorAyat && b.surahNumber === selectedSurah.nomor) ? "currentColor" : "none"} /></button>
                     </div>
                     <div className={`text-right font-serif leading-[2.8] sm:leading-[3.2] ${activeVerse === ayat.nomorAyat && isPlaying ? 'text-emerald-400' : darkMode ? 'text-slate-100' : 'text-slate-900'}`} style={{ fontSize: window.innerWidth < 640 ? `${fontSize * 0.75}px` : `${fontSize}px` }} dir="rtl">{ayat.teksArab}</div>
                     {showTranslation && <p className={`text-sm sm:text-lg font-light leading-relaxed max-w-2xl px-1 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>{ayat.teksIndonesia}</p>}
@@ -462,6 +469,41 @@ const App = () => {
              <button onClick={() => {setActiveVerse(null); setIsPlaying(false); if(audioRef.current){audioRef.current.pause()}}} className={`transition-colors p-2 ${darkMode ? 'text-slate-500 hover:text-red-400' : 'text-slate-400 hover:text-red-500'}`}><X size={18}/></button>
            </div>
            <audio ref={audioRef} onPlaying={() => {setIsPlaying(true); setIsBuffering(false);}} onWaiting={() => setIsBuffering(true)} onCanPlay={() => setIsBuffering(false)} onEnded={() => {setIsPlaying(false); setIsBuffering(false);}} className="hidden" />
+        </div>
+      )}
+
+      {/* --- POPUP PENGEMBANGAN --- */}
+      {showDevPopup && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 backdrop-blur-sm bg-black/40 animate-in fade-in duration-300">
+          <div className={`relative max-w-md w-full p-8 sm:p-10 rounded-[15px] border shadow-2xl transition-all duration-300 transform scale-100 ${darkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-emerald-50'}`}>
+            <button 
+              onClick={() => setShowDevPopup(false)} 
+              className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${darkMode ? 'text-slate-500 hover:bg-slate-800' : 'text-slate-400 hover:bg-slate-100'}`}
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-full flex items-center justify-center mb-6">
+                <Info size={32} />
+              </div>
+              
+              <h3 className={`text-xl sm:text-2xl font-black mb-4 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                Informasi Pengembangan
+              </h3>
+              
+              <p className={`text-sm sm:text-base leading-relaxed mb-8 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                Aplikasi ini masih dalam tahap penyempurnaan. Kami memohon maaf apabila terdapat fitur atau tombol yang belum dapat diakses sepenuhnya. Kami berkomitmen untuk terus memperbarui setiap bagian secara berkala demi kenyamanan ibadah Anda.
+              </p>
+              
+              <button 
+                onClick={() => setShowDevPopup(false)}
+                className="w-full py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-black rounded-[12px] shadow-lg shadow-emerald-900/20 active:scale-95 transition-all"
+              >
+                Saya Mengerti
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
