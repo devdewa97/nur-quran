@@ -6,14 +6,14 @@ import {
   FileText, Scroll, Hand, Loader2, Coffee, GraduationCap
 } from 'lucide-react';
 
-// Konfigurasi Utama
+// Konfigurasi
 const API_BASE_URL = 'https://equran.id/api/v2';
 const APP_NAME = "Nur Qur'an";
 const BYLINE = "by Mas Dewa";
 const TAGLINE = "Cahaya untuk Hati, Petunjuk Sepanjang Hidup";
 const PREFERRED_QARI = '05'; 
 
-// --- DATABASE STATIS ---
+// --- DATA STATIS ---
 const TAHLIL_CONTENT = [
   { id: 1, title: "Al-Fatihah", ar: "إِلَى حَضْرَةِ النَّبِيِّ الْمُصْطَفَى مُحَمَّدٍ...", idn: "Kepada yang terhormat Nabi Muhammad SAW..." },
   { id: 2, title: "Al-Ikhlas (3x)", ar: "قُلْ هُوَ اللَّهُ أَحَدٌ . اللَّهُ الصَّمَدُ...", idn: "Katakanlah: Dialah Allah, Yang Maha Esa..." },
@@ -28,7 +28,7 @@ const DOA_CATEGORIES = [
 
 const DOA_LIST = {
   daily: [
-    { id: 1, title: "Doa Bangun Tidur", ar: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا...", idn: "Segala puji bagi Allah yang menghidupkan kami..." },
+    { id: 1, title: "Doa Bangun Tidur", ar: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا...", idn: "Segala puji bagi Allah yang menghidupkan kami setelah mematikan kami..." },
     { id: 2, title: "Doa Sebelum Makan", ar: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا...", idn: "Ya Allah, berkahilah kami atas rezeki yang Engkau berikan..." }
   ],
   prophet: [{ id: 1, title: "Doa Nabi Yunus", ar: "لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ...", idn: "Tidak ada Tuhan selain Engkau..." }],
@@ -42,7 +42,7 @@ const QUICK_SURAHS = [
   { id: 18, name: 'Al-Kahfi' }, { id: 36, name: 'Yasin' }, { id: 67, name: 'Al-Mulk' }, { id: 56, name: 'Al-Waqi\'ah' }
 ];
 
-// --- FUNGSI PENYIMPANAN ---
+// --- UTILS ---
 const saveToLocal = (key, val) => localStorage.setItem(`nurquran_${key}`, JSON.stringify(val));
 const getFromLocal = (key) => {
   const data = localStorage.getItem(`nurquran_${key}`);
@@ -57,9 +57,11 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSurah, setSelectedSurah] = useState(null);
+  
   const [activeVerse, setActiveVerse] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  
   const [darkMode, setDarkMode] = useState(getFromLocal('darkMode') ?? false);
   const [fontSize, setFontSize] = useState(getFromLocal('fontSize') ?? 32);
   const [showTranslation, setShowTranslation] = useState(getFromLocal('showTrans') ?? true);
@@ -67,7 +69,9 @@ const App = () => {
   
   const audioRef = useRef(null);
 
-  useEffect(() => { fetchSurahs(); }, []);
+  useEffect(() => {
+    fetchSurahs();
+  }, []);
 
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add('dark');
@@ -81,7 +85,9 @@ const App = () => {
       const json = await res.json();
       setSurahs(json.data);
       setLoading(false);
-    } catch (err) { setLoading(false); }
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   const openSurah = async (number) => {
@@ -95,7 +101,9 @@ const App = () => {
       setDoaCategory(null);
       setLoading(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err) { setLoading(false); }
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   const toggleBookmark = (verse) => {
@@ -118,7 +126,7 @@ const App = () => {
       if (audioRef.current) {
         audioRef.current.src = url;
         audioRef.current.load();
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(e => console.log(e));
       }
     }
   };
@@ -128,7 +136,8 @@ const App = () => {
     s.nomor.toString().includes(searchTerm)
   );
 
-  // --- KOMPONEN UI ---
+  // --- UI COMPONENTS ---
+
   const Particles = () => {
     const pArray = useMemo(() => Array.from({ length: 15 }), []);
     return (
@@ -143,7 +152,7 @@ const App = () => {
   };
 
   const Header = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-lg border-b px-4 sm:px-8 py-4 sm:py-6 transition-all duration-300 ${darkMode ? 'bg-slate-950/95 border-slate-800 shadow-2xl' : 'bg-white/95 border-slate-200 shadow-sm'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-lg border-b px-4 sm:px-8 py-4 sm:py-6 transition-all duration-300 ${darkMode ? 'bg-slate-950/90 border-slate-800 shadow-2xl shadow-black/40' : 'bg-white/95 border-slate-200'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => {setView('home'); setSubMenu(null); setDoaCategory(null); setSelectedSurah(null);}}>
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-700 rounded-[10px] flex items-center justify-center text-white shadow-xl">
@@ -191,16 +200,18 @@ const App = () => {
       <button onClick={backAction} className="flex items-center gap-2 text-emerald-700 dark:text-emerald-500 font-bold text-sm mb-8 hover:translate-x-[-4px] transition-transform">
         <ChevronLeft size={20} /> Kembali
       </button>
-      <div className="flex items-center gap-4 mb-10">
-        <div className="w-14 h-14 bg-emerald-700 text-white rounded-[15px] flex items-center justify-center shadow-xl"><IconComponent size={28} /></div>
+      <div className="flex items-center gap-4 mb-10 px-2">
+        <div className="w-14 h-14 bg-emerald-700 text-white rounded-[15px] flex items-center justify-center shadow-xl">
+           <IconComponent size={28} />
+        </div>
         <h2 className={`text-2xl sm:text-4xl font-black ${darkMode ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
       </div>
       <div className="space-y-6">
         {data.map(item => (
-          <div key={item.id} className={`p-6 sm:p-10 rounded-[15px] border shadow-sm transition-all hover:shadow-md ${darkMode ? 'bg-slate-900 border-slate-800 shadow-none' : 'bg-white border-slate-200'}`}>
+          <div key={item.id} className={`p-6 sm:p-10 rounded-[15px] border shadow-sm transition-all hover:shadow-md ${darkMode ? 'bg-slate-900 border-slate-800 shadow-none' : 'bg-white border-slate-200 shadow-sm'}`}>
             <div className="flex justify-between items-center mb-6">
               <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-[6px] uppercase tracking-widest">{item.type || 'Bacaan'}</span>
-              <h4 className="font-bold text-emerald-600 text-sm">{item.title}</h4>
+              <h4 className="font-bold text-emerald-600 text-xs sm:text-sm">{item.title}</h4>
             </div>
             <div className={`text-right text-3xl sm:text-4xl font-serif mb-8 leading-relaxed ${darkMode ? 'text-slate-100' : 'text-slate-900'}`} dir="rtl">{item.ar}</div>
             <p className={`text-sm sm:text-lg font-light leading-relaxed border-l-4 border-emerald-100 pl-4 ${darkMode ? 'text-slate-400 border-emerald-900' : 'text-slate-600'}`}>{item.idn}</p>
@@ -214,7 +225,7 @@ const App = () => {
     return (
       <div className={`min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden relative ${darkMode ? 'bg-slate-950 text-white' : 'bg-white text-slate-900'}`}>
         <style>{`
-          @keyframes floatUp { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh); opacity: 0; } }
+          @keyframes floatUp { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) translateX(20px); opacity: 0; } }
           .animate-float-up { animation: floatUp linear infinite; }
           @keyframes gradMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
           .bg-animated-emerald { background: linear-gradient(-45deg, #064e3b, #065f46, #059669, #064e3b); background-size: 400% 400%; animation: gradMove 12s ease infinite; }
@@ -246,7 +257,7 @@ const App = () => {
             <section className="relative w-full mb-10 sm:mb-14 rounded-[15px] overflow-hidden shadow-2xl bg-animated-emerald">
               <Particles />
               <div className="relative z-10 p-8 sm:p-24 flex flex-col items-center text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-black uppercase text-emerald-300 border border-white/5 mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[9px] sm:text-xs font-black uppercase text-emerald-300 border border-white/5 mb-8">
                   <Sparkles size={12} className="animate-pulse" /> Nur Qurani - AL QURAN DIGITAL
                 </div>
                 <h2 className="text-2xl sm:text-6xl font-black text-white leading-tight mb-8 drop-shadow-xl">Pelita Hati dalam Setiap <span className="text-emerald-300">Lantunan Ayat.</span></h2>
@@ -301,7 +312,7 @@ const App = () => {
           <div className="max-w-4xl mx-auto py-6 animate-in fade-in duration-500 px-4">
             <button onClick={() => setSubMenu(null)} className="flex items-center gap-2 text-emerald-700 dark:text-emerald-500 font-bold text-sm mb-10"><ChevronLeft size={20} /> Kembali</button>
             <h2 className={`text-3xl sm:text-5xl font-black mb-12 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Yasin & Tahlil</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <button onClick={() => setView('tahlil-content')} className={`p-10 rounded-[15px] border group text-left active:scale-95 transition-all ${darkMode ? 'bg-slate-900 border-slate-800 hover:border-emerald-500 shadow-none' : 'bg-white border-slate-200 hover:border-emerald-400 shadow-sm'}`}>
                  <FileText size={48} className="text-emerald-600 mb-6 group-hover:scale-110 transition-transform" />
                  <h3 className={`text-2xl font-black mb-2 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Bacaan Tahlil</h3>
@@ -396,7 +407,7 @@ const App = () => {
              {bookmarks.length === 0 ? <div className="text-center py-32 rounded-[15px] border-2 border-dashed border-slate-200 dark:border-slate-800 text-slate-400">Belum ada ayat disimpan.</div> : (
                <div className="grid grid-cols-1 gap-6 px-2">
                  {bookmarks.map((b, i) => (
-                   <div key={i} className={`p-8 rounded-[15px] border shadow-sm ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                   <div key={i} className={`p-8 rounded-[15px] border shadow-sm ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
                       <div className="flex justify-between items-center mb-6">
                         <span className="text-xs font-black text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 px-4 py-1.5 rounded-full uppercase tracking-widest">{b.surahName} : {b.nomorAyat}</span>
                         <button onClick={() => toggleBookmark(b)} className="text-slate-300 hover:text-red-500 transition-colors"><X size={20}/></button>
